@@ -17,6 +17,7 @@
  */
 mod cli;
 
+use std::collections::HashMap;
 use std::env;
 use std::io::prelude::*;
 use std::path::Path;
@@ -193,7 +194,7 @@ fn execute(
     let variables = &cli_options.variables;
     let runner_options = cli_options.to(filename, current_dir);
 
-    runner::run(content, &runner_options, variables, logger)
+    runner::run(content, &runner_options, variables, state_modifier, logger)
 }
 
 #[cfg(target_family = "unix")]
@@ -360,6 +361,14 @@ fn get_summary(runs: &[HurlRun], duration: u128) -> String {
 /// Code borrowed from <https://github.com/rust-lang/cargo/blob/master/crates/cargo-util/src/lib.rs>
 fn is_ci() -> bool {
     env::var("CI").is_ok() || env::var("TF_BUILD").is_ok()
+}
+
+/// Function to add functions into the variables set
+fn state_modifier(variables: &mut HashMap<String, runner::Value>) {
+    variables.insert(
+        "-uuid".to_string(),
+        hurl::runner::Value::Function(|| runner::Value::String(uuid::Uuid::new_v4().to_string())),
+    );
 }
 
 #[cfg(test)]

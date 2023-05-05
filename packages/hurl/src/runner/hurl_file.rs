@@ -71,6 +71,7 @@ pub fn run(
     content: &str,
     runner_options: &RunnerOptions,
     variables: &HashMap<String, Value>,
+    state_modifier: impl FnOnce(&mut HashMap<String, Value>),
     logger: &Logger,
 ) -> Result<HurlResult, String> {
     // Try to parse the content
@@ -90,6 +91,10 @@ pub fn run(
     let mut http_client = http::Client::new(cookie_input_file);
     let mut entries = vec![];
     let mut variables = variables.clone();
+
+    // Adding functions to the variables for use
+    state_modifier(&mut variables);
+
     let mut entry_index = 1;
     let mut retry_count = 1;
     let n = if let Some(to_entry) = runner_options.to_entry {
