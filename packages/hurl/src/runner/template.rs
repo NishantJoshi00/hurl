@@ -51,6 +51,7 @@ fn eval_template_element(
 pub fn eval_expression(expr: &Expr, variables: &HashMap<String, Value>) -> Result<String, Error> {
     let source_info = &expr.variable.source_info;
     let name = &expr.variable.name;
+
     match variables.get(name.as_str()) {
         Some(value) => {
             if value.is_renderable() {
@@ -77,7 +78,12 @@ impl Value {
     pub fn is_renderable(&self) -> bool {
         matches!(
             self,
-            Value::Integer(_) | Value::Bool(_) | Value::Float(_) | Value::String(_) | Value::Null
+            Value::Integer(_)
+                | Value::Bool(_)
+                | Value::Float(_)
+                | Value::String(_)
+                | Value::Null
+                | Value::Function(_)
         )
     }
 }

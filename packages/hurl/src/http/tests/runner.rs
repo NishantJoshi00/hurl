@@ -28,5 +28,5 @@ fn test_hello() {
     let logger = LoggerBuilder::new().build();
     let variables = HashMap::new();
     let runner_options = RunnerOptions::default();
-    runner::run(content, &runner_options, &variables, &logger).unwrap();
+    runner::run(content, &runner_options, &variables, |_| {}, &logger).unwrap();
 }

@@ -110,6 +110,7 @@ impl Value {
             Value::Null => "null".to_string(),
             Value::Unit => "unit".to_string(),
             Value::Regex(value) => format!("regex <{}>", value.as_str()),
+            Value::Function(_) => "function".to_string(),
         }
     }
 }
@@ -148,6 +149,7 @@ impl Value {
             Value::String(value) => format!("string <{value}>"),
             Value::Unit => "something".to_string(),
             Value::Regex(value) => format!("regex <{value}>"),
+            Value::Function(_) => "function".to_string(),
         }
     }
 }

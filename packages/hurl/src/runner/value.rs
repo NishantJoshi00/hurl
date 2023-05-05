@@ -34,6 +34,7 @@ pub enum Value {
     String(String),
     Unit,
     Regex(regex::Regex),
+    Function(fn() -> Value),
 }
 
 // You must implement it yourself because of the Float
@@ -79,6 +80,7 @@ impl fmt::Display for Value {
                 let s = str::replace(x.as_str(), "/", "\\/");
                 format!("/{s}/")
             }
+            Value::Function(generator) => return fmt::Display::fmt(&generator(), f),
         };
         write!(f, "{value}")
     }
@@ -107,6 +109,7 @@ impl Value {
             Value::Null => "null".to_string(),
             Value::Unit => "unit".to_string(),
             Value::Regex(_) => "regex".to_string(),
+            Value::Function(_) => "function".to_string(),
         }
     }
 
